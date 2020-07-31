@@ -132,6 +132,22 @@ display_state (int state)
 }
 
 const char *
+display_state_host (int state)
+{
+  switch (state)
+  {
+  case STATE_OK:
+    return ("normal");
+  case STATE_WARNING:
+    return ("down");
+  case STATE_CRITICAL:
+    return ("down");
+  case STATE_UNKNOWN:
+  default:
+    return ("unreachable");
+  }
+}
+const char *
 display_state_type (int state_type)
 {
   switch (state_type)
@@ -457,7 +473,7 @@ check_handler (int event_type, void *data)
         json_object_set_new (json, "resource", json_string (host_chk_data->host_name));
         json_object_set_new (json, "event", json_string ("Host Check"));
         json_object_set_new (json, "group", json_string ("Nagios"));
-        json_object_set_new (json, "severity", json_string (display_state (host_chk_data->state)));
+        json_object_set_new (json, "severity", json_string (display_state_host (host_chk_data->state)));
         json_object_set_new (json, "environment", json_string (strcmp (cov_environment, "") ? cov_environment : environment));
         json_object_set_new (json, "service", json_pack ("[s]", strcmp (cov_service, "") ? cov_service : "Platform"));
         json_object_set_new (json, "tags", json_pack ("[s+]", "check=", display_check_type (host_chk_data->check_type)));
